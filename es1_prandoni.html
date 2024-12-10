@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione prenotazioni</title>
+
+    <style>
+        table,th,td{
+            border: 1px solid;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    
+    <h1>Gestione prenotazioni (Matteo Prandoni)</h1>
+    <form id="myform">
+        <table>
+            <tr>
+                <th>Codice</th>
+                <td><input type="text" id="codice" name="codice"></td>
+            </tr>
+            <tr>
+                <th>Numero Biglietti</th>
+                <td><input type="number" min="0" id="numeroBiglietti" name="numeroBiglietti"></td>
+            </tr>
+            <tr>
+                <td><button type="button" onclick="aggiungiPrenotazione()">Aggiungi prenotazione</button></td>
+                <td><button type="button" onclick="mostraPrenotazione()">Mostra prenotazione</button></td>
+            </tr>
+        </table>
+        <br>
+        <div id="tabellaRisultato">
+
+        </div>
+    </form>
+
+
+    <script>
+        //inizializzo array e tabella
+        let prenotazioni=[];
+        let tabella=`<table>
+                        <tr>
+                            <th>Codice</th>
+                            <th>Numero Biglietti</th>
+                            <th>Importo totale</th>
+                        </tr>` 
+        //variabile per salvarmi il totale delle prenotazioni con importo>200
+        totale_maggiore200=0
+
+        function aggiungiPrenotazione(){
+            //input
+            let codice=document.getElementById("codice").value;
+            let num_biglietti=document.getElementById("numeroBiglietti").value;
+            let importo=0;
+
+            //svuoto le caselle di testo per il prossimo inserimento
+            document.getElementById("codice").value="";
+            document.getElementById("numeroBiglietti").value="";
+
+            //validazione input
+            if(verificaCodice(codice)){
+                if(verificaNumBiglietti(num_biglietti)){
+                    importo=calcolaImporto();   //se il codice è valido e il numero di biglietti>0, calcolo l'importo
+                    //aggiungo l'oggetto all'array prenotazioni
+                    prenotazioni.push({codice: codice, numeroBiglietti: num_biglietti, importo: importo});
+                }
+                else
+                    alert("ERRORE! Numero di biglietti non valido")
+            }else{
+                alert("ERRORE! Codice non valido!")
+            }
+
+            //se l'importo è maggiore di 200 aggiungo l'importo a totale_maggiore200
+            if(importo>200)
+                totale_maggiore200+=importo;
+            
+            //funzioni annidate 
+            //calcolaImporto(): restituisce l'importo
+            function calcolaImporto(){
+                let importo;
+                importo=num_biglietti*20;
+                if(num_biglietti>=1 && num_biglietti<=4)
+                    return importo;
+                else if(num_biglietti>=5 && num_biglietti<=9)
+                    return importo - (importo*10/100);
+                else
+                    return importo - (importo*20/100);
+            }
+
+            //verificaCodice(codice): restituisce true se il codice non è una stringa vuota
+            function verificaCodice(codice){
+                if(codice!="")
+                    return true;
+                else
+                    return false;            
+            }
+
+            //verificaNumBiglietti(num_biglietti): restituisce true se il numero di biglietti>0
+            function verificaNumBiglietti(num_biglietti){
+                if(num_biglietti>0)
+                    return true;
+                else
+                    return false;
+            }
+            
+        }
+
+        function mostraPrenotazione(){
+            /*
+            array prenotazioni= [{codice: codice, numeroBiglietti: num_biglietti, importo: importo},
+                                  {codice: codice, numeroBiglietti: num_biglietti, importo: importo},
+                                  ...]
+            
+            */
+            for (let i=0;i<prenotazioni.length;i++){
+                tabella+=`<tr>
+                            <td>${prenotazioni[i].codice}</td>
+                            <td>${prenotazioni[i].numeroBiglietti}</td>
+                            <td>${prenotazioni[i].importo} €</td>
+                        </tr>`;
+            }
+            //chiudo la tabella aggiungendo un paragrafo per il totale delle prenotazioni con importo>200
+            tabella+=`</table>
+                        <p>Totale prenotazioni con importo>200 €: ${totale_maggiore200} €</p>`;
+            //assoccio al div id tabellaRisultato la tabella
+            document.getElementById("tabellaRisultato").innerHTML=tabella;
+            //rinizializzo la tabella con solo l'intestazione
+            tabella=`<table>
+                        <tr>
+                            <th>Codice</th>
+                            <th>Numero Biglietti</th>
+                            <th>Importo totale</th>
+                        </tr>` 
+
+        }
+    </script>
+</body>
+</html>

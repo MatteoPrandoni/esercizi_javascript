@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flusso di cassa</title>
+</head>
+<body>
+    <script>
+        let valore_cassa=Number(prompt("Inserisci il valore iniziale della cassa: "));
+        console.log("Valore di cassa iniziale: "+valore_cassa);
+
+        //prima chiamata 
+        console.log("Prima chiamata: calcola_cassa(valore_cassa,10,15,35)");
+        valore_cassa=calcola_cassa(valore_cassa,10,15,35)
+        console.log("Valore attuale: "+valore_cassa);
+        
+        //seconda chiamata
+        console.log("Seconda chiamata: calcola_cassa(valore_cassa, 15,27)");
+        valore_cassa=calcola_cassa(valore_cassa,15,27);
+        console.log("Valore attuale: "+valore_cassa)
+       
+        //terza chiamata
+        console.log("Terza chiamata: calcola_cassa(valore_cassa, 10)");
+        valore_cassa=calcola_cassa(valore_cassa, 10);
+        console.log("Valore attuale: "+valore_cassa);
+        
+
+        //funzione calcola_cassa
+        function calcola_cassa(){
+            let cassa=arguments[0]; //il primo argomento passato è il valore della cassa
+            for (let i=1;i<arguments.length;i++){ //i=1 perchè arguments[0] è già contenuto nella variabile cassa
+                cassa+=arguments[i]; //aggiungo al valore della cassa tutti gli altri parametri passati
+            }
+            return cassa;
+        }
+    </script>
+</body>
+</html>
