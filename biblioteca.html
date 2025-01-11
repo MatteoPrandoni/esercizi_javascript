@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca</title>
+    <style>
+        table,th,td{
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+    
+    <h1>Esercizio biblioteca</h1>
+        <form id="form">
+            <table>
+                <tr>
+                    <th>ID utente</th>
+                    <th><input type="text" id="id_utente"></th>
+                </tr>
+                <tr>
+                    <th>Titolo del libro</th>
+                    <th><input type="text" id="titolo_libro"></th>
+                </tr>
+                <tr>
+                    <th>Numero di giorni</th>
+                    <th><input type="number" id="giorni" min="0"></th>
+                </tr>
+                
+            </table>
+            <input type="button" value="Aggiungi prenotazione" onclick="addBooking()">
+            <br>
+            <!--div che conterrà la tabella con i risultati-->
+            <div id="tabellaRisultati">
+                
+            </div>
+            <br>
+            <!--div che conterrà il riepilogo dei giorni di prenotazione-->
+            <div id="riepilogo">
+                
+            </div>
+        </form>
+
+        <script>
+            //Inizializzo una variabile globale tabella (ATTENZIONE all'utilizzo dell'apice `)
+            let tabella=`<table>
+                            <tr>
+                                <th>Id utente</th>
+                                <th>Titolo del libro</th>
+                                <th>Giorni</th>
+                            </tr>`;
+
+            //Inizializzo una variabile globale riepilogo (ATTENZIONE all'utilizzo dell'apice `)               
+            let riepilogo=`<p>Totale giorni di prenotazione</p>`;
+
+            //array utenti
+            utenti=[];
+
+            //array sommario
+            sommario=[];
+
+            function addBooking(){
+                var id_utente=(document.getElementById("id_utente").value);
+                var titolo_libro=(document.getElementById("titolo_libro").value);
+                var giorni=Number(document.getElementById("giorni").value);
+
+                //validazione dei dati inseriti
+                if(id_utente=="" || titolo_libro=="" || giorni==0){
+                    alert("Assicurati di inserire tutti i campi")
+                    return;
+                }
+                if(giorni<0){
+                    alert("ERRORE! Giorni negativi!")
+                    return;
+                }
+
+                //svuoto le caselle di testo
+                document.getElementById("id_utente").value="";
+                document.getElementById("titolo_libro").value="";
+                document.getElementById("giorni").value="";
+
+                //Aggiungo all'array tutti i dati inseriti (per essere inseriti nella tabella)
+                utenti.push({id: id_utente, titolo: titolo_libro, giorni: giorni});
+                //Genero la tabella
+                renderTable();
+                //Richiamo la funzione per il riepilogo
+                updateSummary();
+
+                function renderTable(){
+                    /*Itero per il numero di utenti che ho inserito. A ogni iterazione concateno una nuova riga alla tabella.
+                    Ogni riga contiene tutti i dati che sono stati inseriti nel form.
+                     */
+                    for(let i=0; i<utenti.length;i++){
+                        tabella+=`<tr>
+                            <td>${utenti[i].id}</td>
+                            <td>${utenti[i].titolo}</td>
+                            <td>${utenti[i].giorni}</td>
+                        </tr>`
+                    }
+                    //chiudo la tabella
+                    tabella+=`</table>`;
+                    //associo al div id="tabellaRisultati" il valore della variabile tabella
+                    document.getElementById("tabellaRisultati").innerHTML=tabella;
+                    //Rinizializzo la tabella con solo l'intestazione
+                    tabella=`<table>
+                            <tr>
+                                <th>Id utente</th>
+                                <th>Titolo del libro</th>
+                                <th>Giorni</th>
+                            </tr>`
+                }
+
+                function updateSummary(){
+                    let a=false //a=False: id non è ancora stato inserito   a=True id presente
+                    //Itero per la lunghezza dell'array sommario
+                    for(let i=0;i<sommario.length;i++){
+                        if(id_utente==sommario[i].id){ // se l'id inserito è già presente nell'array sommario
+                            sommario[i].giorni+=giorni; //incremento i giorni di quell'utente dei giorni inseriti da tastiera
+                            a=true 
+                        }
+                    }
+                    if(a==false) //se l'id inserito non è presente nell'array sommario
+                        sommario.push({id: id_utente, giorni: giorni}) //aggiungo l'oggetto all'array sommario
+                    for(let i=0;i<sommario.length;i++){
+                        riepilogo+=`<p>-Utente ${sommario[i].id}: ${sommario[i].giorni} giorni</p>`;   
+                    }
+                    //associo al div id="riepilogo" il valore della variabile riepilogo
+                    document.getElementById("riepilogo").innerHTML=riepilogo;
+                    //Rinizializzo riepilogo solo con l 'intestazione
+                    riepilogo=`<p>Totale giorni di prenotazione</p>`;
+
+                }
+
+                
+
+
+            }
+            
+
+        </script>
+</body>
+</html>

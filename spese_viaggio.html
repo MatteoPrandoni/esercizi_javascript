@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spese Viaggio</title>
+</head>
+<body>
+    <h2>Gestione delle spese per un viaggio (output sulla console)</h2>
+    <script>
+
+        let valore=0;
+
+        //validazione input valore
+        while(true){
+            valore=prompt("Inserisci il budget per il viaggio (budget minimo: 500€): ");
+            if(valore>=500)
+                break;
+        }
+
+        console.log("Budget iniziale: "+valore);
+
+        console.log("Prima chiamata: calcola_budget(valore, 30, 50)");
+        valore=calcola_budget(valore, 30, 50);
+        console.log("Budget rimanente: "+valore+"\n");
+
+        console.log("Seconda chiamata: calcola_budget(valore, 20, 15, 34)");
+        valore=calcola_budget(valore, 20, 15, 34);
+        console.log("Budget rimanente: "+valore+"\n");
+
+        console.log("Terza chiamata: calcola_budget(valore, 12, 22, 36, 5)");
+        valore=calcola_budget(valore, 12, 22, 36, 5);
+        console.log("Budget rimanente: "+valore+"\n");
+
+
+
+
+        function calcola_budget(){
+            let budget= arguments[0];
+            for(let i=1;i<arguments.length;i++) //i=1 perchè arguments[0] è nella variabile budget
+                budget-=arguments[i];  
+            return budget;
+        }
+
+        
+    </script>
+
+</body>
+</html>
